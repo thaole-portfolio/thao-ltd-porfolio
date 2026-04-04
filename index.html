@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CV - Lê Thị Dạ Thảo - Quản lý Đào tạo</title>
+
+        <!-- Tailwind CSS cho bố cục và giao diện -->
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <!-- Google Fonts -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap"
+            rel="stylesheet">
+
+        <!-- FontAwesome Icons -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+        <!-- Cấu hình màu sắc tùy chỉnh -->
+        <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            light: 'rgb(var(--brand-light) / <alpha-value>)',
+                            DEFAULT: 'rgb(var(--brand) / <alpha-value>)',
+                            dark: 'rgb(var(--brand-dark) / <alpha-value>)',
+                        },
+                        sidebar: {
+                            DEFAULT: 'rgb(var(--sidebar) / <alpha-value>)',
+                            light: 'rgb(var(--sidebar-light) / <alpha-value>)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+        <style>
+        :root {
+            /* Burgundy (Đỏ mận) mặc định */
+            --brand-light: 251 113 133;
+            --brand: 190 18 60;
+            --brand-dark: 136 19 55;
+            --sidebar: 39 39 42;
+            --sidebar-light: 63 63 70;
+
+        }
+
+        /* Hiệu ứng hiển thị khi cuộn trang */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Timeline styles */
+        .timeline-dot::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgb(var(--brand));
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px rgb(var(--brand));
+        }
+
+        /* Tối ưu khi in ra PDF (Ctrl+P / Cmd+P) */
+        @media print {
+            body {
+                background-color: white !important;
+                -webkit-print-color-adjust: exact;
+                margin: 0;
+                padding: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .print-shadow-none {
+                box-shadow: none !important;
+                max-width: 100% !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+            }
+
+            .fade-in {
+                opacity: 1 !important;
+                transform: none !important;
+            }
+
+            /* Đảm bảo bố cục không bị vỡ khi in */
+            .print-col-left {
+                width: 33.333333% !important;
+                float: left;
+                height: 100vh;
+            }
+
+            .print-col-right {
+                width: 66.666667% !important;
+                float: left;
+            }
+
+            .page-break-inside-avoid {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+    </head>
+
+    <body
+        class="bg-slate-100 text-slate-800 font-sans antialiased py-0 md:py-10">
+
+        <!-- Bảng chọn màu sắc (Sẽ ẩn khi in) -->
+        <div
+            class="fixed bottom-24 right-6 z-50 no-print flex flex-col gap-3 bg-white p-3 rounded-full shadow-lg border border-slate-200 items-center">
+            <span class="text-[10px] font-bold text-slate-400">MÀU</span>
+            <button onclick="setTheme('burgundy')"
+                class="w-6 h-6 rounded-full bg-[#be123c] hover:scale-125 transition"
+                title="Đỏ mận (Mặc định)"></button>
+            <button onclick="setTheme('navy')"
+                class="w-6 h-6 rounded-full bg-[#1d4ed8] hover:scale-125 transition"
+                title="Xanh Navy"></button>
+            <button onclick="setTheme('teal')"
+                class="w-6 h-6 rounded-full bg-[#0f766e] hover:scale-125 transition"
+                title="Xanh ngọc"></button>
+            <button onclick="setTheme('purple')"
+                class="w-6 h-6 rounded-full bg-[#6d28d9] hover:scale-125 transition"
+                title="Tím than"></button>
+        </div>
+
+        <!-- Nút chức năng nổi (Sẽ ẩn khi in) -->
+        <div class="fixed bottom-6 right-6 z-50 no-print flex flex-col gap-3">
+            <button onclick="window.print()"
+                class="bg-brand text-white w-14 h-14 rounded-full shadow-lg hover:bg-brand-dark hover:scale-105 transition transform flex items-center justify-center group"
+                title="In / Lưu PDF">
+                <i class="fas fa-print text-xl"></i>
+                <span
+                    class="absolute right-16 bg-slate-800 text-white text-sm px-3 py-1 rounded opacity-0 group-hover:opacity-100 transition whitespace-nowrap">Lưu
+                    PDF / In</span>
+            </button>
+        </div>
+
+        <!-- Khung chính CV -->
+        <div
+            class="max-w-[1000px] mx-auto bg-white shadow-2xl md:rounded-2xl overflow-hidden print-shadow-none flex flex-col md:flex-row relative">
+
+            <!-- Cột Trái (Thông tin cá nhân, Học vấn, Kỹ năng) -->
+            <aside
+                class="w-full md:w-1/3 bg-sidebar text-slate-100 print-col-left relative transition-colors duration-500">
+                <!-- Điểm nhấn màu sắc -->
+                <div
+                    class="h-2 w-full bg-brand absolute top-0 left-0 transition-colors duration-500"></div>
+
+                <div class="p-8 md:p-10">
+                    <!-- Hình ảnh đại diện -->
+                    <div
+                        class="w-32 h-32 rounded-full border-4 border-slate-600 mx-auto overflow-hidden mb-6 mt-4 shadow-inner bg-sidebar-light flex items-center justify-center transition-colors duration-500">
+                        <!-- Thay thế link ảnh thực tế vào src -->
+                        <img src="./images/thao-le-2.png" alt="Profile Picture"
+                            class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Tên & Chức danh -->
+                    <div class="text-center mb-10">
+                        <h1
+                            class="font-heading text-2xl md:text-3xl font-bold text-white tracking-wide uppercase mb-2">
+                            THẢO LÊ
+                        </h1>
+                        <p
+                            class="text-brand-light font-medium tracking-wider text-sm">
+                            Quản lý / P. Giám đốc Đào tạo
+                        </p>
+                    </div>
+
+                    <!-- Thông tin liên hệ -->
+                    <div class="mb-10 space-y-4 text-sm text-slate-300 fade-in">
+                        <h2
+                            class="font-heading text-lg font-semibold text-white border-b border-slate-600 pb-2 mb-4">Liên
+                            Hệ</h2>
+                        <div class="flex items-start gap-3">
+                            <i
+                                class="fas fa-map-marker-alt mt-1 text-brand-light w-4 text-center"></i>
+                            <span>TP. Hồ Chí Minh</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i
+                                class="fas fa-phone mt-0.5 text-brand-light w-4 text-center"></i>
+                            <span>+84 986 486 602</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i
+                                class="fas fa-envelope mt-0.5 text-brand-light w-4 text-center"></i>
+                            <span class="break-all">thao.letd21@gmail.com</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <i
+                                class="fab fa-linkedin mt-0.5 text-brand-light w-4 text-center"></i>
+                            <a href="#"
+                                class="hover:text-white transition">linkedin.com/in/thao-ltd</a>
+                        </div>
+                    </div>
+
+                    <!-- Học vấn -->
+                    <div class="mb-10 fade-in">
+                        <h2
+                            class="font-heading text-lg font-semibold text-white border-b border-slate-600 pb-2 mb-4">Học
+                            Vấn</h2>
+                        <div class="mb-4">
+                            <h3 class="text-white font-medium">Cử nhân Quản trị
+                                Kinh doanh</h3>
+                            <p class="text-brand-light text-sm mb-1">ĐH Kinh tế
+                                TP.HCM (UEH)</p>
+                            <p class="text-xs text-slate-400"><i
+                                    class="far fa-calendar-alt mr-1"></i> 2019 -
+                                2021</p>
+                            <ul
+                                class="text-xs text-slate-300 mt-2 list-disc list-inside">
+                                <li>Loại: Khá</li>
+                            </ul>
+                        </div>
+                        <div class="mb-4">
+                            <h3 class="text-white font-medium">Cao đẳng Quản trị
+                                Kinh doanh</h3>
+                            <p class="text-brand-light text-sm mb-1">Trường Cao
+                                đẳng Đại Việt Sài Gòn</p>
+                            <p class="text-xs text-slate-400"><i
+                                    class="far fa-calendar-alt mr-1"></i> 2011 -
+                                2014</p>
+                            <ul
+                                class="text-xs text-slate-300 mt-2 list-disc list-inside">
+                                <li>Loại: Khá</li>
+                                <li>Cộng tác viên Tuyển sinh</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Chứng chỉ -->
+                    <div class="fade-in">
+                        <h2
+                            class="font-heading text-lg font-semibold text-white border-b border-slate-600 pb-2 mb-4">Chứng
+                            Chỉ</h2>
+                        <ul class="space-y-3 text-sm text-slate-300">
+                            <li class="flex items-start gap-2">
+                                <i
+                                    class="fas fa-award text-brand-light mt-1 w-4"></i>
+                                <div>
+                                    <span class="block text-white">Tư Duy Phản Biện (Critical Thinking) Nâng Cao</span>
+                                    <span
+                                        class="text-xs text-slate-400">2018</span>
+                                </div>
+                            </li>
+
+                            <li class="flex items-start gap-2">
+                                <i
+                                    class="fas fa-award text-brand-light mt-1 w-4"></i>
+                                <div>
+                                    <span class="block text-white">Tư Duy Phản Biện (Critical Thinking) Cơ Bản</span>
+                                    <span
+                                        class="text-xs text-slate-400">2017</span>
+                                </div>
+                            </li>
+
+                            <li class="flex items-start gap-2">
+                                <i
+                                    class="fas fa-language text-brand-light mt-1 w-4"></i>
+                                <div>
+                                    <span class="block text-white">Chứng chỉ
+                                        Tiếng Anh B1</span>
+                                    <span
+                                        class="text-xs text-slate-400">2014</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <i
+                                    class="fas fa-award text-brand-light mt-1 w-4"></i>
+                                <div>
+                                    <span class="block text-white">Chứng chỉ Tin
+                                        học Văn phòng</span>
+                                    <span
+                                        class="text-xs text-slate-400">2014</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </aside>
+
+            <!-- Cột Phải (Tóm tắt, Kinh nghiệm, Kỹ năng chi tiết) -->
+            <main class="w-full md:w-2/3 bg-white p-8 md:p-12 print-col-right">
+
+                <!-- Tóm tắt nghề nghiệp -->
+                <section class="mb-12 fade-in">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center">
+                            <i class="fas fa-bullseye text-xl"></i>
+                        </div>
+                        <h2
+                            class="font-heading text-2xl font-bold text-slate-800">Tóm
+                            Tắt Nghề Nghiệp</h2>
+                    </div>
+
+                    <div
+                        class="professional-summary text-slate-600 leading-relaxed text-justify space-y-4">
+                        <p>
+                            Với <strong>hơn 10 năm cống hiến trong lĩnh vực giáo
+                                dục</strong> và <strong>5+ năm kinh nghiệm quản
+                                trị đào tạo</strong> tại các môi trường quốc tế,
+                            đa phương tiện, tôi định hình bản thân là một nhà
+                            quản lý giáo dục thực chiến và tư duy chiến lược.
+                        </p>
+
+                        <p>
+                            Trong vai trò <strong>Phó Giám đốc Đào tạo (Phó
+                                phòng Đào tạo) tại Học viện Kỹ xảo Điện ảnh &
+                                Hoạt hình MAAC</strong>, tôi trực tiếp điều hành
+                            toàn diện các mảng học vụ trọng yếu, bao gồm:
+                        </p>
+
+                        <ul
+                            class="experience-highlights list-disc list-outside ml-5 space-y-2">
+                            <li>
+                                <strong>Quản trị Nhân sự & Chuyên môn:</strong>
+                                Lãnh đạo đội ngũ nhân sự học vụ; chủ động xây
+                                dựng mạng lưới và mời gọi các chuyên gia, giảng
+                                viên thỉnh giảng chất lượng cao tham gia công
+                                tác giảng dạy.
+                            </li>
+                            <li>
+                                <strong>Quản trị Nguồn thu Tài chính Học
+                                    vụ:</strong> Hoạch định chiến lược dự thu
+                                học phí đầu năm học, lập danh sách chi tiết và
+                                trực tiếp điều phối, giám sát đội ngũ nhân viên
+                                triển khai thu phí hiệu quả theo đúng tiến độ.
+                            </li>
+                            <li>
+                                <strong>Điều hành Vận hành Đào tạo:</strong>
+                                Giám sát chặt chẽ công tác tổ chức đào tạo, phân
+                                bổ nhân sự quản lý sát sao từng lớp học, đồng
+                                thời tối ưu hóa việc vận hành hệ thống phòng học
+                                và cơ sở vật chất.
+                            </li>
+                            <li>
+                                <strong>Báo cáo & Phân tích Chiến lược:</strong>
+                                Xây dựng và thực hiện hệ thống báo cáo định kỳ
+                                (tuần/tháng/năm), cung cấp dữ liệu minh bạch và
+                                phân tích chuyên sâu cho Ban Giám đốc để đưa ra
+                                các quyết sách kịp thời.
+                            </li>
+                        </ul>
+
+                        <p>
+                            Cộng hưởng cùng nền tảng <strong>Quản trị Kinh doanh
+                                từ UEH</strong>, tôi mang đến tư duy quản lý
+                            nhạy bén: biết cách kết hợp hài hòa giữa việc nâng
+                            cao chất lượng trải nghiệm học viên với việc hoàn
+                            thành mục tiêu kinh doanh, hướng tới sự phát triển
+                            nhân lực bền vững cho tổ chức.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Năng lực cốt lõi (Core Competencies) -->
+                <section class="mb-12 fade-in page-break-inside-avoid">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center">
+                            <i class="fas fa-star text-xl"></i>
+                        </div>
+                        <h2
+                            class="font-heading text-2xl font-bold text-slate-800">Năng
+                            Lực Cốt Lõi</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Box 1 -->
+                        <div
+                            class="bg-slate-50 border border-slate-100 p-4 rounded-xl border-l-4 border-l-brand">
+                            <h3
+                                class="font-semibold text-slate-800 mb-2 flex items-center gap-2">
+                                <i class="fas fa-book-reader text-brand"></i>
+                                Chuyên môn Đào tạo
+                            </h3>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span
+                                    class="bg-white border border-slate-200 text-slate-600 text-xs px-2.5 py-1 rounded-full shadow-sm">Triển
+                                    khai & Quản trị Chương trình</span>
+                                <span
+                                    class="bg-white border border-slate-200 text-slate-600 text-xs px-2.5 py-1 rounded-full shadow-sm">Định
+                                    hướng Học viên (Orientation)</span>
+                                <span
+                                    class="bg-white border border-slate-200 text-slate-600 text-xs px-2.5 py-1 rounded-full shadow-sm">Đảm
+                                    bảo Chất lượng (Edu QA)</span>
+                                <span
+                                    class="bg-white border border-slate-200 text-slate-600 text-xs px-2.5 py-1 rounded-full shadow-sm">Hướng
+                                    dẫn Nghiệp vụ (Mentoring)</span>
+                            </div>
+                        </div>
+                        <!-- Box 2 -->
+                        <div
+                            class="bg-slate-50 border border-slate-100 p-4 rounded-xl border-l-4 border-l-brand">
+                            <h3
+                                class="font-semibold text-slate-800 mb-2 flex items-center gap-2">
+                                <i class="fas fa-cogs text-brand"></i> Quản lý &
+                                Vận hành
+                            </h3>
+                            <div class="flex flex-wrap gap-2 mt-2">
+                                <span
+                                    class="bg-white border border-slate-200 text-slate-600 text-xs px-2.5 py-1 rounded-full shadow-sm">Team
+                                    Leadership</span>
+                                <span
+                                    class="bg-white border border-slate-200 text-slate-600 text-xs px-2.5 py-1 rounded-full shadow-sm">Quản
+                                    lý Ngân sách</span>
+                                <span
+                                    class="bg-white border border-slate-200 text-slate-600 text-xs px-2.5 py-1 rounded-full shadow-sm">Tối
+                                    ưu Học vụ</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Kinh nghiệm làm việc -->
+                <section class="mb-12">
+                    <div class="flex items-center gap-3 mb-8 fade-in">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center">
+                            <i class="fas fa-briefcase text-xl"></i>
+                        </div>
+                        <h2
+                            class="font-heading text-2xl font-bold text-slate-800">Kinh
+                            Nghiệm Làm Việc</h2>
+                    </div>
+
+                    <div
+                        class="border-l-2 border-slate-200 ml-3 md:ml-4 space-y-10 pl-8 relative">
+
+                        <!-- Job 0: Kinh doanh tự do -->
+                        <div
+                            class="relative fade-in timeline-dot page-break-inside-avoid">
+                            <div
+                                class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                                <h3 class="text-xl font-bold text-slate-800">Chủ
+                                    cửa hàng / Quản lý Vận hành</h3>
+                                <span
+                                    class="text-sm font-medium text-brand bg-brand/10 px-3 py-1 rounded-full mt-2 md:mt-0 w-max">3/2025
+                                    – Hiện tại</span>
+                            </div>
+                            <h4
+                                class="text-lg font-medium text-slate-600 mb-3"><i
+                                    class="fas fa-store mr-1 text-slate-400"></i>
+                                Quán Mỳ Cay & Trà sữa Babana</h4>
+
+                            <ul
+                                class="list-disc list-outside ml-4 text-slate-600 space-y-2 text-justify">
+                                <li><strong>Quản lý Vận hành & Kinh
+                                        doanh:</strong> Trực tiếp điều hành toàn
+                                    bộ hoạt động kinh doanh hàng ngày của cửa
+                                    hàng, đảm bảo chất lượng sản phẩm (F&B) và
+                                    trải nghiệm dịch vụ khách hàng.</li>
+                                <li><strong>Quản lý Nhân sự & Tài
+                                        chính:</strong> Phụ trách tuyển dụng,
+                                    sắp xếp lịch làm việc cho nhân viên. Quản lý
+                                    luồng tiền thu chi và kiểm soát doanh thu
+                                    cửa hàng.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Job 1: Phó phòng Đào tạo -->
+                        <div
+                            class="relative fade-in timeline-dot page-break-inside-avoid">
+                            <div
+                                class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                                <h3 class="text-xl font-bold text-slate-800">Phó
+                                    phòng Đào tạo</h3>
+                                <span
+                                    class="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0 w-max">9/2022
+                                    – 2/2025</span>
+                            </div>
+                            <h4
+                                class="text-lg font-medium text-slate-600 mb-3"><i
+                                    class="fas fa-building mr-1 text-slate-400"></i>
+                                Arena Multimedia | TP. Hồ Chí Minh</h4>
+                            <p class="text-sm text-slate-500 italic mb-4">Chịu
+                                trách nhiệm quản lý toàn bộ hoạt động học vụ,
+                                điều phối giảng viên và đảm bảo chất lượng đào
+                                <li><strong>Tuyển dụng & Đào tạo:</strong> Tổ
+                                    chức tuyển dụng, demo lớp và trực tiếp hướng
+                                    dẫn, chia sẻ nghiệp vụ học vụ (Mentoring &
+                                    Onboarding) cho nhân sự mới.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Job 2: Chuyên viên Đào tạo -->
+                        <div
+                            class="relative fade-in timeline-dot page-break-inside-avoid">
+                            <div
+                                class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                                <h3
+                                    class="text-xl font-bold text-slate-800">Chuyên
+                                    viên Đào tạo</h3>
+                                <span
+                                    class="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0 w-max">10/2019
+                                    – 8/2022</span>
+                            </div>
+                            <h4
+                                class="text-lg font-medium text-slate-600 mb-3"><i
+                                    class="fas fa-building mr-1 text-slate-400"></i>
+                                Arena Multimedia | TP. Hồ Chí Minh</h4>
+
+                            <ul
+                                class="list-disc list-outside ml-4 text-slate-600 space-y-2 text-justify">
+                                <li><strong>Quản lý Vận hành Lớp học:</strong>
+                                    Phụ trách điều phối và theo dõi tiến độ của
+                                    khoảng <strong>13 lớp học</strong>. Thực
+                                    hiện công tác chăm sóc học viên (gọi điện
+                                    hỏi thăm, liên hệ phụ huynh) và sắp xếp,
+                                    nhắc lịch giảng viên.</li>
+                                <li><strong>Quản trị Tài chính Học vụ:</strong>
+                                    Trực tiếp quản lý nguồn thu học phí, theo
+                                    dõi công nợ và lập báo cáo tiến độ thu phí
+                                    định kỳ cho cấp quản lý.</li>
+                                <li><strong>Hành chính Đào tạo:</strong> Theo
+                                    dõi lịch giảng dạy thực tế và thực hiện chấm
+                                    công chính xác cho đội ngũ giảng viên.</li>
+                                <li><strong>Báo cáo & Các công tác
+                                        khác:</strong> Thực hiện các báo cáo
+                                    định kỳ theo yêu cầu và tham gia hỗ trợ các
+                                    công việc vận hành đào tạo khác tại cơ
+                                    sở.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Job 3: Giáo vụ Khoa -->
+                        <div
+                            class="relative fade-in timeline-dot page-break-inside-avoid">
+                            <div
+                                class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                                <h3
+                                    class="text-xl font-bold text-slate-800">Giáo
+                                    vụ Khoa</h3>
+                                <span
+                                    class="text-sm font-medium text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-2 md:mt-0 w-max">3/2015
+                                    – 5/2019</span>
+                            </div>
+                            <h4
+                                class="text-lg font-medium text-slate-600 mb-3"><i
+                                    class="fas fa-university mr-1 text-slate-400"></i>
+                                Khoa Khoa học - Công nghệ | Trường Cao đẳng Đại
+                                Việt Sài Gòn</h4>
+
+                            <ul
+                                class="list-disc list-outside ml-4 text-slate-600 space-y-2 text-justify">
+                                <li>Phối hợp cùng Ban chủ nhiệm khoa và giảng
+                                    viên để quản lý, tổ chức các hoạt động học
+                                    vụ, giáo vụ hàng ngày của sinh viên trong
+                                    khoa.</li>
+                                <li>Hướng dẫn và hỗ trợ sinh viên thực hiện các
+                                    thủ tục hành chính, giải đáp thắc mắc liên
+                                    quan đến lịch học, lịch thi và quy chế đào
+                                    tạo.</li>
+                                <li>Lưu trữ hồ sơ, quản lý dữ liệu đào tạo và
+                                    thực hiện các báo cáo giáo vụ định kỳ theo
+                                    yêu cầu của nhà trường.</li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Dự án nổi bật -->
+                <section class="fade-in page-break-inside-avoid">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div
+                            class="w-10 h-10 rounded-lg bg-brand/10 text-brand flex items-center justify-center">
+                            <i class="fas fa-award text-xl"></i>
+                        </div>
+                        <h2
+                            class="font-heading text-2xl font-bold text-slate-800">Thành
+                            Tích Nổi Bật</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div
+                            class="border border-slate-200 rounded-lg p-5 hover:border-brand hover:shadow-md transition">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i
+                                    class="fas fa-check-circle text-brand text-lg"></i>
+                                <h3 class="font-bold text-slate-800">Tối ưu Vận
+                                    hành & Edu QA</h3>
+                            </div>
+                            <p class="text-sm text-slate-600">Quản lý và điều
+                                phối mượt mà hệ thống lớp học mỗi tháng. Đảm bảo
+                                chặt chẽ chất lượng đào tạo và không ngừng nâng
+                                tầm trải nghiệm học tập (Student Experience)
+                                xuyên suốt khóa học.</p>
+                        </div>
+
+                        <div
+                            class="border border-slate-200 rounded-lg p-5 hover:border-brand hover:shadow-md transition">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i
+                                    class="fas fa-chart-line text-brand text-lg"></i>
+                                <h3 class="font-bold text-slate-800">Hỗ trợ
+                                    Tuyển sinh</h3>
+                            </div>
+                            <p class="text-sm text-slate-600">Phối hợp chặt chẽ
+                                trong công tác tư vấn chuyên môn, đóng góp trực
+                                tiếp vào việc gia tăng số lượng và mở rộng quy
+                                mô học viên đầu vào cho các khóa học.</p>
+                        </div>
+
+                        <div
+                            class="border border-slate-200 rounded-lg p-5 hover:border-brand hover:shadow-md transition">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i
+                                    class="fas fa-user-check text-brand text-lg"></i>
+                                <h3 class="font-bold text-slate-800">Giữ chân
+                                    Học viên (Retention)</h3>
+                            </div>
+                            <p class="text-sm text-slate-600">Triển khai các
+                                giải pháp theo dõi và chăm sóc học viên hiệu
+                                quả, kiểm soát tốt tỷ lệ bỏ/ngừng học (Dropout
+                                Rate), qua đó duy trì mức độ hài lòng cao với
+                                chương trình.</p>
+                        </div>
+
+                        <div
+                            class="border border-slate-200 rounded-lg p-5 hover:border-brand hover:shadow-md transition">
+                            <div class="flex items-center gap-3 mb-2">
+                                <i
+                                    class="fas fa-calendar-alt text-brand text-lg"></i>
+                                <h3 class="font-bold text-slate-800">Tổ chức Sự
+                                    kiện & Ngoại khóa</h3>
+                            </div>
+                            <p class="text-sm text-slate-600">Trực tiếp lên ý
+                                tưởng và điều phối thành công các sự kiện quy mô
+                                (Lễ tốt nghiệp, cắm trại, du hè, workshop, thi
+                                đấu GAMEs), tạo dựng môi trường gắn kết cho cộng
+                                đồng học viên.</p>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <!-- Script tạo hiệu ứng cuộn trang mượt mà -->
+        <script>
+        // Logic đổi màu Theme
+        const themes = {
+            teal: {
+                '--brand-light': '79 209 197', // #4fd1c5
+                '--brand': '15 118 110',       // #0f766e
+                '--brand-dark': '17 94 89',    // #115e59
+                '--sidebar': '30 41 59',       // slate-800
+                '--sidebar-light': '51 65 85', // slate-700
+            },
+            navy: {
+                '--brand-light': '96 165 250', // blue-400
+                '--brand': '29 78 216',        // blue-700
+                '--brand-dark': '30 58 138',   // blue-900
+                '--sidebar': '15 23 42',       // slate-900
+                '--sidebar-light': '30 41 59', // slate-800
+            },
+            burgundy: {
+                '--brand-light': '251 113 133', // rose-400
+                '--brand': '190 18 60',         // rose-700
+                '--brand-dark': '136 19 55',    // rose-900
+                '--sidebar': '39 39 42',        // zinc-800
+                '--sidebar-light': '63 63 70',  // zinc-700
+            },
+            purple: {
+                '--brand-light': '167 139 250', // violet-400
+                '--brand': '109 40 217',        // violet-700
+                '--brand-dark': '76 29 149',    // violet-900
+                '--sidebar': '23 23 23',        // neutral-900
+                '--sidebar-light': '38 38 38',  // neutral-800
+            }
+        };
+
+        function setTheme(themeName) {
+            const theme = themes[themeName];
+            for (let key in theme) {
+                document.documentElement.style.setProperty(key, theme[key]);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        // Tùy chọn: bỏ comment dòng dưới nếu chỉ muốn animate 1 lần
+                        // observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach(el => observer.observe(el));
+        });
+    </script>
+    </body>
+
+</html>
